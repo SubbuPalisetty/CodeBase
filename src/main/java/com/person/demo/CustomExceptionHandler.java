@@ -19,20 +19,20 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler
     public ResponseEntity<ErrorResponse> handleNotFoundException
                         (RecordNotFoundException exception) 
     {
-        List<String> details = new ArrayList<>();
+        List<String> details = new ArrayList<String>();
         details.add(exception.getLocalizedMessage());
         ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, details);
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<ErrorResponse>(error, HttpStatus.NOT_FOUND);
     }   
     
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException
                         (CustomException exception) 
     {
-        List<String> details = new ArrayList<>();
+        List<String> details = new ArrayList<String>();
         details.add(exception.getLocalizedMessage());
         ErrorResponse error = new ErrorResponse(CUSTOM_MESSAGE, details);
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<ErrorResponse>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }   
     
 }
