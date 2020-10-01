@@ -5,33 +5,38 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api")	
 public class PersonController {
 
 	@Autowired
 	PersonDAO personDAO;
 
-	@RequestMapping("/getPerson/{id}")
+	@GetMapping("/getPerson/{id}")
 	public Person showPerson(@PathVariable int id) {
 		Person person = personDAO.findById(id)
 				.orElseThrow(() -> new RecordNotFoundException("Person ID '" + id + "' Doesn't exist"));
 		return person;
 	}
 	
-	@RequestMapping("/getAddress/{id}")
+	@GetMapping("/getAddress/{id}")
 	public Set<Address> showAddress(@PathVariable int id) {
 		Person person = personDAO.findById(id)
 				.orElseThrow(() -> new RecordNotFoundException("Person ID '" + id + "' Doesn't exist"));
 		return person.getAddresses();
 	}
 
-	@RequestMapping(value = "/addPerson", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/addPerson")
 	public Person add(@RequestBody Person person) {
 
 		/*
@@ -49,7 +54,7 @@ public class PersonController {
 		return person;
 	}
 
-	@RequestMapping(value = "/deletePerson/{pid}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/deletePerson/{pid}")
 	public Person delete(@PathVariable int id) {
 
 		Person person = personDAO.findById(id)
@@ -63,7 +68,7 @@ public class PersonController {
 		return person;
 	}
 
-	@RequestMapping(value = "/updatePerson", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/updatePerson")
 	public Person updatePerson(@RequestBody Person p) {
 
 		Person person = personDAO.findById(p.getPid())
@@ -95,7 +100,7 @@ public class PersonController {
 		return person;
 	}
 
-	@RequestMapping(value = "/addAddress/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/addAddress/{id}")
 	public Person addAddress(@PathVariable int id, @RequestBody Address address) {
 		Person person = personDAO.findById(id)
 				.orElseThrow(() -> new RecordNotFoundException("Person ID '" + id + "' Doesn't exist"));
@@ -119,7 +124,7 @@ public class PersonController {
 		return person;
 	}
 
-	@RequestMapping(value = "/updateAddress/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/updateAddress/{id}")
 	public Person updateAddress(@PathVariable int id, @RequestBody Address updatedAddress) {
 		System.out.println("id = " + id);
 		Person person = personDAO.findById(id).orElseThrow(() -> new RecordNotFoundException("Person ID '" + id + "' Doesn't exist"));
@@ -142,7 +147,7 @@ public class PersonController {
 			return person;		
 	}
 
-	@RequestMapping(value = "/deleteAddress/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/deleteAddress/{id}")
 	public Person deleteAddress(@PathVariable int id, @RequestBody Address address) {
 		System.out.println("id = " + id);
 		Person person = personDAO.findById(id).orElseThrow(() -> new RecordNotFoundException("Person ID '" + id + "' Doesn't exist"));
@@ -162,7 +167,7 @@ public class PersonController {
 			return person;		
 	}
 
-	@RequestMapping(value = "/personCount", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/personCount")
 	public String showCount() {
 
 		try {
@@ -173,7 +178,7 @@ public class PersonController {
 		}				
 	}
 
-	@RequestMapping(value = "/listPersons", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/listPersons")
 	public List<Person> listAllPersons() {	
 			
 			List<Person> list = (List<Person>) personDAO.findAll();
